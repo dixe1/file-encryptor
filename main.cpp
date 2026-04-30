@@ -55,14 +55,14 @@ std::optional<Info> process(const std::string& fileNameOrString, Type type = FRO
 
 int main()
 {
-    auto e1 = process("GitHubPrefix.txt", FROM_FILE);
-    if (!e1)
-        std::println("error1");
-
-    auto e2 = process(e1.value().buffer, FROM_STRING, e1.value().key);
-    if (!e2)
-        std::println("error2");
-
-    std::println("{}",e1.value().buffer);
-    std::println("{}",e2.value().buffer);
+    // auto e1 = process("GitHubPrefix.txt", FROM_FILE);
+    // if (!e1)
+    //     std::println("error1");
+    //
+    // auto e2 = process(e1.value().buffer, FROM_STRING, e1.value().key);
+    // if (!e2)
+    //     std::println("error2");
+    //
+    // std::println("{}",e1.value().buffer);
+    // std::println("{}",e2.value().buffer);
 }
