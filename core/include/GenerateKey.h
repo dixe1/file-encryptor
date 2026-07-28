@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <string>
+#include <optional>
 #include <sodium.h>
 
 namespace core
@@ -13,9 +14,9 @@ namespace core
 
     // ------------------------
 
-    PasswordStruct generateKey(const std::string& password);
+    std::optional<PasswordStruct> generateKey(const std::string& password);
 
-    std::array<unsigned char, crypto_secretbox_KEYBYTES> generateKey
+    std::optional<std::array<unsigned char, crypto_secretbox_KEYBYTES>> generateKey
     (
         const std::string& password,
         const std::array<unsigned char, crypto_pwhash_SALTBYTES>& salt

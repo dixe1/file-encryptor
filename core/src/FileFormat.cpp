@@ -13,7 +13,10 @@ namespace core
     {
         FileStruct result;
 
-        const size_t fileSize = std::filesystem::file_size(fileName);
+        std::error_code ec;
+        const size_t fileSize = std::filesystem::file_size(fileName, ec);
+        if(ec)
+            return std::unexpected("could not read file size");
 
         result.RAW_BYTES.resize(fileSize  - result.salt.size() - result.nonce.size());
 

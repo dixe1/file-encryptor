@@ -18,9 +18,11 @@ void encryptFile(const std::string& pathToFile, const std::string& password)
 
     inputFile.read(reinterpret_cast<char *>(inputFileStruct.RAW_BYTES.data()), fileSize);
 
-    core::PasswordStruct passwordStruct = core::generateKey(password);
+    auto passwordStruct = core::generateKey(password);
 
-    auto test = encrypt(inputFileStruct.RAW_BYTES, passwordStruct);
+
+
+    auto test = encrypt(inputFileStruct.RAW_BYTES, *passwordStruct);
 
     saveEncryptedFile(test, pathToFile + ".encrypted");
 }

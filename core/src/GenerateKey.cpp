@@ -1,17 +1,18 @@
 #include <print>
 #include <sodium.h>
+#include <optional>
 
 #include "GenerateKey.h"
 namespace core
 {
-    PasswordStruct generateKey(const std::string &password)
+    std::optional<PasswordStruct> generateKey(const std::string &password)
     {
         std::array<unsigned char, crypto_secretbox_KEYBYTES> key{};
         std::array<unsigned char, crypto_pwhash_SALTBYTES> salt{};
 
         randombytes_buf(salt.data(), crypto_pwhash_SALTBYTES);
 
-        int x = crypto_pwhash(
+        const int code = crypto_pwhash(
             key.data(),
             key.size(),
             password.data(),
@@ -22,14 +23,17 @@ namespace core
             crypto_pwhash_ALG_ARGON2ID13
         );
 
-        return {key, salt};
+        if (code != 0)
+            return std::nullopt;
+
+        return PasswordStruct{key, salt};
     }
 
-    std::array<unsigned char, 32> generateKey(const std::string &password, const std::array<unsigned char, crypto_pwhash_SALTBYTES> &salt)
+    std::optional<std::array<unsigned char, crypto_secretbox_KEYBYTES>> generateKey(const std::string &password, const std::array<unsigned char, crypto_pwhash_SALTBYTES> &salt)
     {
         std::array<unsigned char, crypto_secretbox_KEYBYTES> key{};
 
-        int x = crypto_pwhash(
+        const int code = crypto_pwhash(
             key.data(),
             key.size(),
             password.data(),
@@ -39,6 +43,9 @@ namespace core
             crypto_pwhash_MEMLIMIT_MODERATE,
             crypto_pwhash_ALG_ARGON2ID13
         );
+
+        if (code != 0)
+            return std::nullopt;
 
         return key;
     }

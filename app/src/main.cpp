@@ -8,6 +8,8 @@
 #include "DecryptFile.h"
 #include "EncryptFile.h"
 
+// TODO: Error handling in app
+
 int main(int argc, char* argv[])
 {
     std::string pathToFile = argv[1];
