@@ -1,0 +1,237 @@
+# File Encryptor
+
+<p align="left">
+<img src="https://badgen.net/badge/icon/Windows/4E4E4E?icon=windows&label=&labelColor=4E4E4E" alt="Windows">
+<img src="https://badgen.net/badge/icon/Linux/4E4E4E?icon=linux&label=&labelColor=4E4E4E" alt="Linux">
+<img src="https://badgen.net/badge/icon/macOS/4E4E4E?icon=apple&label=&labelColor=4E4E4E" alt="macOS">
+</p>
+
+<p>
+<img src="https://img.shields.io/badge/language-C++-00599C?logo=c%2B%2B" alt="C++">
+<img src="https://img.shields.io/badge/build-CMake-3eae2b?logo=cmake&logoColor=white" alt="CMake">
+<img src="https://img.shields.io/badge/license-MIT-green" alt="License: MIT">
+</p>
+
+File encryption tool written in C++23 using [libsodium](https://github.com/jedisct1/libsodium).
+
+The project is split into two main parts:
+
+* `core` — cryptographic logic and encrypted file format
+* `app` — command-line application used to encrypt and decrypt files
+
+## Features
+
+* File encryption and decryption
+* Password-based key generation
+* Argon2id password hashing through libsodium
+* Random salt generation
+* Random nonce generation
+* Encrypted file format with stored salt and nonce
+* C++23
+* CMake build system
+
+## Project Structure
+
+```text
+.
+├── app
+│   ├── include
+│   │   ├── ClearTerminal.h
+│   │   ├── DecryptFile.h
+│   │   └── EncryptFile.h
+│   ├── src
+│   │   ├── ClearTerminal.cpp
+│   │   ├── DecryptFile.cpp
+│   │   ├── EncryptFile.cpp
+│   │   └── main.cpp
+│   └── CMakeLists.txt
+│
+├── core
+│   ├── include
+│   │   ├── Decryption.h
+│   │   ├── Encryption.h
+│   │   ├── FileFormat.h
+│   │   └── GenerateKey.h
+│   ├── src
+│   │   ├── Decryption.cpp
+│   │   ├── Encryption.cpp
+│   │   ├── FileFormat.cpp
+│   │   └── GenerateKey.cpp
+│   └── CMakeLists.txt
+│
+├── CMakeLists.txt
+└── .gitignore
+```
+
+## App Status
+
+> **The `app` section is currently in an early and unfinished state.**
+
+The current CLI is mainly a basic interface for testing the encryption and decryption functionality provided by the `core` library.
+
+The `app` code and user interface are planned to be **significantly redesigned and improved** in the future.
+
+Current limitations include:
+
+* Basic command-line interface
+* Limited error handling
+* Early-stage user interaction
+* No proper argument validation
+* No polished user experience
+
+The main focus of the project is currently the `core` library and its encryption/decryption functionality.
+
+## How It Works
+
+The application uses a password to derive an encryption key.
+
+During encryption:
+
+1. A random salt is generated.
+2. A key is derived from the password using Argon2id.
+3. A random nonce is generated.
+4. The file is encrypted using `crypto_secretbox_easy`.
+5. The encrypted file is saved with the `.encrypted` extension.
+
+The encrypted file contains:
+
+* Salt
+* Nonce
+* Encrypted file data
+
+During decryption, the salt stored in the encrypted file is used to derive the same key from the provided password. The encrypted data is then decrypted and restored to the original file.
+
+## Dependencies
+
+This project uses:
+
+* [libsodium](https://github.com/jedisct1/libsodium) — cryptographic library
+* CMake — build system
+* C++23 compatible compiler
+
+## Requirements
+
+* C++23 compatible compiler
+* CMake 4.2 or higher
+* libsodium
+* Git (optional, for cloning)
+
+## Build
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd FileEncryptor
+```
+
+### 2. Install Dependencies
+
+Make sure `libsodium` and `pkg-config` are installed and available on your system.
+
+### 3. Build the Project
+
+```bash
+cmake -B build
+cmake --build build
+```
+
+The project uses CMake to build both the `core` library and the `app` executable.
+
+## Usage
+
+The current application expects a file path as a command-line argument:
+
+```bash
+App_1 <path-to-file>
+```
+
+The application currently provides the following options:
+
+```text
+1. Encrypt File
+2. Decrypt File
+3. Exit
+```
+
+Encrypted files are saved with the `.encrypted` extension.
+
+> The CLI interface is still under development and will be improved in future versions.
+
+    ## Core Library
+
+    The `core` module contains the main cryptographic functionality of the project.
+
+    It is responsible for:
+
+    * Encryption
+    * Decryption
+    * Password-based key generation
+    * File format handling
+    * Saving encrypted files
+    * Loading encrypted files
+
+    The cryptographic operations are implemented using libsodium primitives.
+
+## Security
+
+This project is currently under development.
+
+Although the project uses established cryptographic primitives provided by libsodium, it has **not been professionally audited**.
+
+Do not rely on this project for protecting sensitive or critical data.
+
+## Roadmap
+
+* [ ] Improve `app` CLI
+* [ ] Add proper command-line argument parsing
+* [ ] Improve error handling
+* [ ] Improve user experience
+* [ ] Add file and path validation
+* [ ] Improve encrypted file format
+* [ ] Add tests
+* [ ] Improve documentation
+* [ ] Add more platform-specific build instructions
+
+## License
+
+This project is licensed under the MIT License.
+
+
+## Usage
+
+Run the application with the path to the file you want to encrypt or decrypt:
+
+```text
+App_1 [file_path]
+```
+
+After starting the application, select an operation and provide the password:
+
+```text
+1 <password>    # Encrypt file
+2 <password>    # Decrypt file
+3               # Exit
+```
+
+For example:
+
+```text
+App_1 example.txt
+
+1 mypassword
+```
+
+To decrypt the encrypted file:
+
+```text
+App_1 example.txt.encrypted
+
+2 mypassword
+```
+
+To exit the application:
+
+```text
+3
+```
