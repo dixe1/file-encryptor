@@ -12,9 +12,6 @@ void decryptFile(const std::string& pathToFile, const core::FileStruct &file, co
 
     auto decryptedFile = decrypt(file, *key);
 
-    const uint32_t fileSize = std::filesystem::file_size(pathToFile);
-    decryptedFile->RAW_BYTES.resize(fileSize);
-
     std::ofstream outPutFile(pathToFile.substr(0, pathToFile.size() - 10), std::ios::binary);
-    outPutFile.write(reinterpret_cast<const char *>(decryptedFile->RAW_BYTES.data()), fileSize);
+    outPutFile.write(reinterpret_cast<const char *>(decryptedFile->RAW_BYTES.data()), decryptedFile->RAW_BYTES.size());
 }
