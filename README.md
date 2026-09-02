@@ -6,77 +6,15 @@
 
 File encryption tool written in C++23 using [libsodium](https://github.com/jedisct1/libsodium).
 
-The project is split into two main parts:
+## INFO 
+This branch implements a stream‑based (chunked) file encryption/decryption approach.
+Instead of loading the entire file into RAM, the program reads and processes the file in fixed‑size segments (chunks). This makes it suitable for handling large files that would otherwise exceed available memory.
 
-* `core` — cryptographic logic and encrypted file format
-* `app` — command-line application used to encrypt and decrypt files
+## Status
 
+> **Not yet functional**  
+> The encryption logic is still under development and does not currently produce correct output.
 
-## App Status
-
-> **The `app` section is currently in an early and unfinished state.**
-
-The current CLI is mainly a basic interface for testing the encryption and decryption functionality provided by the `core` library.
-
-The `app` code and user interface are planned to be **redesigned** in the future.
-
-## Usage
-
-Run the application with the path to the file you want to encrypt or decrypt:
-
-```text
-FileEncryptor [file_path]
-```
-
-After starting the application, select an operation and provide the password:
-
-```text
-1 <password>    # Encrypt file
-2 <password>    # Decrypt file
-3               # Exit
-```
-
-For example:
-
-```text
-FileEncryptor example.txt
-
-1 mypassword
-```
-
-To decrypt the encrypted file:
-
-```text
-FileEncryptor example.txt.encrypted
-
-2 mypassword
-```
-
-To exit the application:
-
-```text
-3
-```
-
-
-Encrypted files are saved with the `.encrypted` extension.
-
-> The CLI interface will be improved in future versions.
-
-## Core Library
-
-The `core` module contains the main cryptographic functionality of the project.
-
-It is responsible for:
-
-* Encryption
-* Decryption
-* Password-based key generation
-* File format handling
-* Saving encrypted files
-* Loading encrypted files
-
-The cryptographic operations are implemented using libsodium primitives.
 ## Requirements
 
 * C++23 compatible compiler

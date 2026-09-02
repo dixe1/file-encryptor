@@ -10,5 +10,8 @@
 
 namespace core
 {
-    FileStruct encrypt(std::vector<unsigned char> input, const PasswordStruct& password);
+    std::vector<unsigned char> encrypt(std::vector<unsigned char> input,const std::array<unsigned char, crypto_secretbox_NONCEBYTES>& nonce, const PasswordStruct& password);
+
+    const std::array<unsigned char, 16> generate_SALT(const PasswordStruct& password);
+    std::array<unsigned char, crypto_secretbox_NONCEBYTES> generate_NONCE(const PasswordStruct& password);
 }
