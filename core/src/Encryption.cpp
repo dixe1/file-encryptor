@@ -8,7 +8,7 @@
 
 namespace core
 {
-    std::vector<unsigned char> encrypt(std::vector<unsigned char> input,const std::array<unsigned char, crypto_secretbox_NONCEBYTES>& nonce, const PasswordStruct& password)
+    std::vector<unsigned char> encrypt(const std::vector<unsigned char>& input,const std::array<unsigned char, crypto_secretbox_NONCEBYTES>& nonce, const PasswordStruct& password)
     {
         std::vector<unsigned char> result(input.size() + crypto_secretbox_MACBYTES);
         const size_t fileSize = input.size();
