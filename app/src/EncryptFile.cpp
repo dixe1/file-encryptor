@@ -30,8 +30,8 @@ void encryptFile(const std::string& pathToFile, const std::string& password)
     auto nonce = core::generate_NONCE(passwordStruct);
     outputFile.write(reinterpret_cast<const char *>(nonce.data()), nonce.size());
 
-    constexpr size_t bufferSize = 2048;
-    std::array<unsigned char, bufferSize> buffer{};
+    constexpr size_t bufferSize = 1024 * 1024;  // 1MB
+    std::vector<unsigned char> buffer(bufferSize);
     while (inputFile.read( reinterpret_cast<std::istream::char_type *>(buffer.data()), buffer.size()) || inputFile.gcount() != 0)
     {
         // TODO: Clean up this
