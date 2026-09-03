@@ -11,6 +11,12 @@ The project is split into two main parts:
 * `core` — cryptographic logic and encrypted file format
 * `app` — command-line application used to encrypt and decrypt files
 
+## Limitations
+
+Currently, it is possible to encrypt and decrypt only small files, because the program loads the entire file into RAM. **The largest file tested was 2.7 GB**.
+
+**Work in progress:** The [`feature/chunk-file-reading`](https://github.com/dixe1/file-encryptor/tree/feature/chunk-file-reading) branch introduces chunk-based file reading and writing, which will allow the tool to handle large files without loading the entire file into memory.
+
 
 ## App Status
 
