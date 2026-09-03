@@ -3,6 +3,9 @@
 #include <array>
 
 #include "EncryptFile.h"
+
+#include <iostream>
+
 #include "Encryption.h"
 
 void encryptFile(const std::string& pathToFile, const std::string& password)
@@ -19,24 +22,32 @@ void encryptFile(const std::string& pathToFile, const std::string& password)
     if (!passwordStructOptional)
         throw std::runtime_error("Could not generate password");
 
-    core::PasswordStruct& passwordStruct = *passwordStructOptional;
+    auto& passwordStruct = *passwordStructOptional;
 
-    {   // Generate and write SALT to file
-        auto salt = core::generate_SALT(passwordStruct);
-        outputFile.write(reinterpret_cast<const char *>(salt.data()), salt.size());
-    }
 
-    // Generate and write NONCE to file
-    auto nonce = core::generate_NONCE(passwordStruct);
-    outputFile.write(reinterpret_cast<const char *>(nonce.data()), nonce.size());
+// TODO: abstract this into core library
 
-    constexpr size_t bufferSize = 1024 * 1024;  // 1MB
-    std::vector<unsigned char> buffer(bufferSize);
+    // Write SALT to file
+    outputFile.write(reinterpret_cast<const char *>(passwordStruct.salt.data()), passwordStruct.salt.size());
+
+    std::vector<unsigned char> buffer(1024 * 1024); // 1MB
     while (inputFile.read( reinterpret_cast<std::istream::char_type *>(buffer.data()), buffer.size()) || inputFile.gcount() != 0)
     {
-        // TODO: Clean up this
-        std::vector<unsigned char> chunk(buffer.begin(), buffer.end() + inputFile.gcount());
+        auto nonce = core::generate_NONCE(passwordStruct);
+
+        const uint64_t chunkSize = inputFile.gcount();
+        std::vector<unsigned char> chunk(buffer.begin(), buffer.begin() + chunkSize);
+
         auto encryptedChunk = core::encrypt(chunk, nonce, passwordStruct);
+
+
+        // Write NONCE
+        outputFile.write(reinterpret_cast<const char *>(nonce.data()), nonce.size());
+
+        // Write size of encrypted data
+        outputFile.write(reinterpret_cast<const char *>(&chunkSize), sizeof(chunkSize));
+
+        // Write encrypted data
         outputFile.write(reinterpret_cast<const char *>(encryptedChunk.data()), encryptedChunk.size());
     }
 }
