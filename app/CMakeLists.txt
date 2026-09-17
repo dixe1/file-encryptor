@@ -1,8 +1,5 @@
 add_executable(FileEncryptor
-    src/main.cpp
-    src/ClearTerminal.cpp
-    src/EncryptFile.cpp
-    src/DecryptFile.cpp
+        src/Main.cpp
 )
 
 include_directories(include)
