@@ -4,4 +4,4 @@
 
 #pragma once
 
-void test();
+void testLibSodium();
